@@ -113,7 +113,7 @@ def configure_dataset_init_model(args):
         args.restore_from = './pretrained/deep_labv3/deeplab_davis_12_0.pth' #resnet50-19c8e357.pth''/home/xiankai/PSPNet_PyTorch/snapshots/davis/psp_davis_0.pth' #
         args.snapshot_dir = './snapshots/davis_iteration_conf/'          #Where to save snapshots of the model
         args.resume = './snapshots/davis/co_attention_davis_124.pth' #checkpoint log file, helping recovering training
-		
+        
     elif args.dataset == 'cityscapes':
         args.batch_size = 8   #Number of images sent to the network in one step, batch_size/num_GPU=2
         args.maxEpoches = 60 #epoch nums, 60 epoches is equal to 90k iterations, max iterations= maxEpoches*len(train)/batch_size')
