@@ -81,7 +81,8 @@ def configure_dataset_model(args):
         args.num_classes = 2      #Number of classes to predict (including background)
         args.img_mean = np.array((104.00698793,116.66876762,122.67891434), dtype=np.float32)       # saving model file and log record during the process of training
         # args.restore_from = './your_path.pth' #resnet50-19c8e357.pth''/home/xiankai/PSPNet_PyTorch/snapshots/davis/psp_davis_0.pth' #
-        args.restore_from = './snapshots/davis_iteration_conf/co_attention.pth' #resnet50-19c8e357.pth''/home/xiankai/PSPNet_PyTorch/snapshots/davis/psp_davis_0.pth' # ####
+        args.restore_from = './snapshots/davis_iteration_conf/co_attention_davis_14.pth' #resnet50-19c8e357.pth''/home/xiankai/PSPNet_PyTorch/snapshots/davis/psp_davis_0.pth' # ####
+        # args.restore_from = './snapshots/davis_iteration_conf/co_attention.pth' #resnet50-19c8e357.pth''/home/xiankai/PSPNet_PyTorch/snapshots/davis/psp_davis_0.pth' # ####
         args.snapshot_dir = './snapshots/davis_iteration/'          #Where to save snapshots of the model
         args.save_segimage = True
         args.seg_save_dir = "./result/test/davis_iteration_conf"
@@ -137,7 +138,8 @@ def main():
     #model.load_state_dict({k.replace('pspmodule.',''):v for k,v in torch.load(args.restore_from)['state_dict'].items()})
     # model.load_state_dict( convert_state_dict(saved_state_dict["model"]) ) #convert_state_dict(saved_state_dict["model"])
     model = nn.DataParallel(model) ####
-    model.load_state_dict( convert_state_dict(saved_state_dict["model"]), False ) #convert_state_dict(saved_state_dict["model"])
+    # model.load_state_dict( convert_state_dict(saved_state_dict["model"]), False ) #convert_state_dict(saved_state_dict["model"])
+    model.load_state_dict( saved_state_dict["model"] ) #convert_state_dict(saved_state_dict["model"]) ####
 
     model.eval()
     model.cuda()
@@ -240,6 +242,11 @@ def main():
 
         mask = (output1*255).astype(np.uint8)
         # print(mask.shape[0])
+        mask = Image.fromarray(mask)
+        # print(mask)
+        # mask = cv2.cvtColor(np.float32(mask), cv2.COLOR_RGB2GRAY) ####
+        mask = np.array(mask)
+        mask = cv2.equalizeHist(mask) ####
         mask = Image.fromarray(mask)
         
 
